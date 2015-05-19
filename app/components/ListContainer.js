@@ -1,6 +1,8 @@
 var React = require('react'),
 		AddItem = require('./AddItem'),
 		List = require('./List'),
+		todoStore = require('../stores/todoStore'),
+		todoActions = require('../actions/todoActions'),
 		ListContainer;
 
 ListContainer = React.createClass({
@@ -8,33 +10,40 @@ ListContainer = React.createClass({
 	getInitialState () {
 
 		return {
-			list: []
+			list: todoStore.getList()
 		}
 
 	},
 
-	/**
-	 * Treat your state as an immutable object. Don't interact with the list array
-	 * directly. Use setState().
-	 */
+	_onChange () {
+
+		this.setState({
+			list: todoStore.getList()
+		});
+
+	},
+
+	componentDidMount () {
+
+		todoStore.addChangeListener(this._onChange);
+
+	},
+
+	componentWillUnmount () {
+
+		todoStore.removeChangeListener(this._onChange);
+
+	},
 
 	handleAddItem (item) {
 
-		this.setState({
-			list: this.state.list.concat([item])
-		})
+		todoActions.addItem(item)
 
 	},
 
 	handleRemoveItem (index) {
 
-		var newList = this.state.list;
-
-		newList.splice(index, 1);
-
-		this.setState({
-			list: newList
-		});
+		todoActions.removeItem(index);
 
 	},
 

@@ -1,5 +1,5 @@
 var React = require('react'),
-		ListContainer = require('./ListContainer'),
+		ListContainer = require('./components/ListContainer'),
 		App;
 
 App = React.createClass({
